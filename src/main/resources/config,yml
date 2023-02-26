@@ -1,0 +1,9 @@
+生成CDK长度: 12
+database:
+ open: false
+ MySQL:
+  port: 3306
+  database: "CDK"
+  username: "admin"
+  password: "123456"
+  host: "127.0.0.1"

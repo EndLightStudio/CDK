@@ -1,0 +1,16 @@
+name: CDK
+main: cdk.Cdk
+version: 1.0.8
+author: 若水
+load: POSTWORLD
+softdepend:
+  - EasyMySQL
+api:
+  - 1.0.9
+permissions:
+  cdk.player.permission:
+    description: "兑换CDK"
+    default: true
+  cdk.admin.permission:
+    description: "CDK系统"
+    default: op
