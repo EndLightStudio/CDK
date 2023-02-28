@@ -1,6 +1,6 @@
 name: CDK
 main: cdk.Cdk
-version: 1.0.8
+version: 1.0.9
 author: 若水
 load: POSTWORLD
 softdepend:

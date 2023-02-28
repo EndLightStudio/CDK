@@ -41,7 +41,7 @@ public abstract class BaseCommand extends Command {
 
                 sender.sendMessage("请不要在控制台执行此指令");
             } else {
-                this.sendDefaultHelp(sender);
+                //this.sendDefaultHelp(sender);
             }
         }
 

@@ -10,12 +10,24 @@ import cdk.commands.sub.GiveSubCommand;
 import cdk.commands.sub.SetSubCommand;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.event.EventHandler;
+import cn.nukkit.event.player.PlayerFormRespondedEvent;
+import cn.nukkit.form.element.ElementButton;
+import cn.nukkit.form.element.ElementButtonImageData;
+import cn.nukkit.form.element.ElementInput;
+import cn.nukkit.form.element.ElementLabel;
+import cn.nukkit.form.response.FormResponseCustom;
+import cn.nukkit.form.response.FormResponseSimple;
+import cn.nukkit.form.window.FormWindowCustom;
+import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import com.smallaswater.easysql.api.SqlEnable;
+
 import java.util.Map;
 
 public class CdkCommand extends BaseCommand {
+
     public CdkCommand(String name, String description) {
         super(name, description);
         this.setUsage("/cdk help");
@@ -30,6 +42,21 @@ public class CdkCommand extends BaseCommand {
     public boolean execute(CommandSender sender, String s, String[] args) {
         if (this.hasPermission(sender)) {
             boolean b = super.execute(sender, s, args);
+            if(args.length == 0){
+                if(sender instanceof Player){
+                    if(this.hasOpPermission(sender)){
+                        this.AdminMenu((Player) sender);
+                    } else {
+                        this.DefaultMenu((Player) sender);
+                    }
+                    return true;
+                }
+                else {
+                    this.sendHelp(sender);
+                    //EG: 如果控制台执行，那么发送Help
+                    return false;
+                }
+            }
             if (!b && args.length == 1) {
                 if (!"help".equalsIgnoreCase(args[0]) && !"?".equalsIgnoreCase(args[0])) {
                     if (sender instanceof Player) {
@@ -92,6 +119,9 @@ public class CdkCommand extends BaseCommand {
     public boolean hasPermission(CommandSender sender) {
         return sender.hasPermission("cdk.player.permission");
     }
+    public boolean hasOpPermission(CommandSender sender) {
+        return sender.hasPermission("cdk.admin.permission");
+    }
 
     public void sendHelp(CommandSender sender) {
         if (sender.isOp()) {
@@ -106,4 +136,33 @@ public class CdkCommand extends BaseCommand {
         }
 
     }
+    public void DefaultMenu(Player player){
+        FormWindowSimple simple = new FormWindowSimple("CDK","");
+        simple.addButton(new ElementButton("兑换",new ElementButtonImageData("path","textures/ui/invite_base")));
+        player.showFormWindow(simple,DefaultMenu);
+    }
+
+    public void AdminMenu(Player player){
+        FormWindowSimple simple = new FormWindowSimple("CDK","");
+        simple.addButton(new ElementButton("兑换",new ElementButtonImageData("path","textures/ui/invite_base")));
+        /*
+         simple.addButton(new ElementButton("创建",new ElementButtonImageData("path","textures/ui/invite_base")));
+         simple.addButton(new ElementButton("设置",new ElementButtonImageData("path","textures/ui/invite_base")));
+         simple.addButton(new ElementButton("删除",new ElementButtonImageData("path","textures/ui/invite_base")));
+         simple.addButton(new ElementButton("给予",new ElementButtonImageData("path","textures/ui/invite_base")));
+         TODO: 下个版本实现
+        */
+        player.showFormWindow(simple,AdminMenu);
+    }
+
+    public static void RedeemMenu(Player player){
+        FormWindowCustom custom = new FormWindowCustom("CDK--兑换");
+        custom.addElement(new ElementInput("","请输入CDK"));
+        player.showFormWindow(custom,RedeemMenu);
+    }
+
+    public static int DefaultMenu = 0x20230228;
+    public static int AdminMenu = 0x20230229;
+    public static int RedeemMenu = 0x20230230;
+
 }
